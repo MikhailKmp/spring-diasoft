@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: spring-4
+  messages:
+    basename: i18n/messages
+questions:
+  file: src/test/resources/questions.csv
+  answers:
+    correct:
+      required:
+        number: 3
+  question:
+    index:
+      first: 3
