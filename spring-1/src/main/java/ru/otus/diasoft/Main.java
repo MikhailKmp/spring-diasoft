@@ -2,7 +2,6 @@ package ru.otus.diasoft;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.otus.diasoft.service.DiagnosticsService;
-import ru.otus.diasoft.service.QuestionService;
 
 public class Main {
 
@@ -13,8 +12,8 @@ public class Main {
 
     public static void main(String[] args) {
         try (ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(CONFIG_LOCATION)) {
-            QuestionService questionService = context.getBean(QuestionService.class);
-            DiagnosticsService.runTest(questionService.getQuestions());
+            DiagnosticsService diagnosticsService = context.getBean(DiagnosticsService.class);
+            diagnosticsService.runDiagnostics();
         }
     }
 }
