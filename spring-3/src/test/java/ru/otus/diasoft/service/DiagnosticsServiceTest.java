@@ -2,6 +2,9 @@ package ru.otus.diasoft.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.diasoft.model.Question;
 
 import java.io.ByteArrayInputStream;
@@ -12,9 +15,14 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @DisplayName("Сервис диагностики")
+@ExtendWith(MockitoExtension.class)
 class DiagnosticsServiceTest {
+
+    @Mock
+    private QuestionService questionService;
 
     @Test
     @DisplayName("Вывод в консоль, когда тест пройден")
@@ -32,9 +40,9 @@ class DiagnosticsServiceTest {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
-        DiagnosticsService diagnosticsService = new DiagnosticsService(1);
-
-        diagnosticsService.runTest(List.of(question));
+        when(questionService.getQuestions()).thenReturn(List.of(question));
+        DiagnosticsService diagnosticsService = new DiagnosticsServiceImpl(1, questionService);
+        diagnosticsService.runDiagnostics();
         assertThat(outputStream.toString()).contains("Тест пройден");
     }
 
@@ -60,9 +68,9 @@ class DiagnosticsServiceTest {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
-        DiagnosticsService diagnosticsService = new DiagnosticsService(2);
-
-        diagnosticsService.runTest(List.of(question1, question2));
+        when(questionService.getQuestions()).thenReturn(List.of(question1, question2));
+        DiagnosticsService diagnosticsService = new DiagnosticsServiceImpl(2, questionService);
+        diagnosticsService.runDiagnostics();
         assertThat(outputStream.toString()).contains("Тест не пройден");
     }
 }
