@@ -1,0 +1,29 @@
+package ru.otus.diasoft.service;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.context.MessageSource;
+
+import java.io.IOException;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+@DisplayName("Сервис вопросов")
+class QuestionServiceTest {
+
+    @Test
+    @DisplayName("Конструктор создает вопросы из файла")
+    void constructorShouldCreateQuestions() throws IOException {
+        QuestionService questionService = new QuestionService("src/test/resources/questions.csv", Mockito.mock(MessageSource.class));
+        assertThat(questionService.getQuestions("ru-RU")).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("Конструктор выдает ошибку, если неверный формат вопросов")
+    void constructorShouldThrowExceptionWhenFormatIsInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> new QuestionService("src/test/resources/questionsError.csv", Mockito.mock(MessageSource.class)));
+    }
+
+}
